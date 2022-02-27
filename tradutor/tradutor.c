@@ -5,15 +5,7 @@
 #define LINESZ 256
 
 // Remove o '\n' do fim da linha
-void remove_newline(char *ptr)
-{
-  while (*ptr) {
-    if (*ptr == '\n')
-      *ptr = 0;
-    else
-      ptr++;
-  }
-}
+void remove_newline(char *ptr);
 
 int main()
 {
