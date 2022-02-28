@@ -4,15 +4,9 @@
 
 #define LINESZ 256
 
-FILE *fp;
 void remove_newline(char *ptr);
-void initial_print();
-void final_print();
-void end_function();
-void init_function();
 
 int main() {
-   
 // variáveis para função {
    char v1, v2, v3;
    int r, s, i1, i2, i3;
@@ -23,9 +17,7 @@ int main() {
 // variáveis para o retorno da função {
    char r1, r2; // para pegar o tipo de retorno e o tipo de valor do retorno
    int t, ret; // para armazenar o valor do sscanf e o valor inteiro do retorno
-//}  
-
-   initial_print();
+//}
 
 // variáveis para o corpo da função {
 //}
@@ -52,7 +44,6 @@ int main() {
 
       // verifica se a linha começa com 'return'
       if (strncmp(line, "return", 6) == 0) {
-         fp = fopen("file.S", "a+");
          t = sscanf(line, "return %c%c%d", &r1, &r2, &ret);
          switch (r1) {
             case 112: //p na tabela ascii
@@ -76,14 +67,14 @@ int main() {
          } else if (r2 == 97) { // a na tabela ascii
             printf("array de inteiro, %c%c%d\n", r1, r2, ret);
          }
+         
       }
 
       // Verifica se line começa com 'end' (3 letras)
       if (strncmp(line, "end", 3) == 0) {
          printf("Linha %d: %s\n", count, line);
          printf("Fim da função\n");
-         printf("---\n");
-         end_function();	      
+         printf("---\n");	      
          continue;
       }
 
@@ -92,13 +83,8 @@ int main() {
          printf("Declaração de uma função:\n");
          printf("Linha %d: %s\n", count, line);
          printf("---\n");	 
+
          r = sscanf(line, "function f%d p%c%d p%c%d p%c%d", &s, &v1, &i1, &v2, &i2, &v3, &i3);
-
-         fp = fopen("file.S", "a+");
-         fprintf(fp, "f%d:\n", s);
-         fclose(fp);
-         init_function();
-
          switch (r) {
             case 7:
                printf("Parâmetros da função f%d: %c%d, %c%d, %c%d\n", s, v1, i1, v2, i2, v3, i3);
@@ -108,6 +94,7 @@ int main() {
          continue;
       }
    }
-   final_print();
+
+   printf("Fim do arquivo\n\n");
    return 0;
 }
