@@ -1,15 +1,21 @@
 #include <stdio.h>
-void remove_newline(char *ptr) {
-   while(*ptr) {
-      if (*ptr == '\n') {
+void remove_newline(char *ptr)
+{
+   while (*ptr)
+   {
+      if (*ptr == '\n')
+      {
          *ptr = 0;
-      } else {
+      }
+      else
+      {
          ptr++;
       }
    }
 }
 
-void initial_print() {
+void initial_print()
+{
    FILE *f;
    char str1[] = ".section .rodata\n\n.data\n\n.text\n\n.globl main\nmain:\n";
    char str2[] = "   pushq %rbp\n";
@@ -22,7 +28,8 @@ void initial_print() {
    fclose(f);
 }
 
-void final_print(){
+void final_print()
+{
    FILE *f;
    char str1[] = "\n   # return 0\n";
    char str2[] = "   movl $0, %%eax\n";
@@ -35,7 +42,8 @@ void final_print(){
    fclose(f);
 }
 
-void init_function() {
+void init_function()
+{
    FILE *f;
    char str1[] = "   pushq %rbp\n";
    char str2[] = "   movq %rsp, rbp\n\n";
@@ -46,7 +54,8 @@ void init_function() {
    fclose(f);
 }
 
-void end_function() {
+void end_function()
+{
    FILE *f;
    char str1[] = "   leave\n";
    char str2[] = "   ret\n";
@@ -55,4 +64,11 @@ void end_function() {
    fprintf(f, "%s", str1);
    fprintf(f, "%s", str2);
    fclose(f);
+}
+
+void declare_variable(int value)
+{
+}
+void declare_array(int *array)
+{
 }
