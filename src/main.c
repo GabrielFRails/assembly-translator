@@ -13,10 +13,16 @@ void init_function();
 
 int main()
 {
-   // variáveis para declaração de variavel {
-   char vIndex, vi1, vi2, vi3, vi4, vi5;
-   int vetSize, va1, va2, va3, va4, va5;
 
+   // variáveis para array{
+   char arraySource[3], arrayDestiny[3];
+   int arraySourceIndex, arrayDestinyIndex, arrayElementIndex;
+   //}
+
+   // variáveis para declaração de variavel {
+   char vIndex,
+       vi1, vi2, vi3, vi4, vi5;
+   int vetSize, va1, va2, va3, va4, va5;
    //}
    // variáveis para função {
    char v1,
@@ -76,7 +82,7 @@ int main()
       if (strncmp(line, "vet", 3) == 0)
       {
 
-         r = sscanf(line, "vet va%d size ci%u", &vIndex, &vetSize);
+         r = sscanf(line, "vet %d size ci%d", &vIndex, &vetSize);
 
          if (r == 2)
          {
@@ -95,6 +101,27 @@ int main()
             if (vetSize > 0)
                printf("Declaração de vetor 'v%d' tamanho '%d'\n", vIndex, vetSize);
             printf("---\n");
+         }
+         continue;
+      }
+      // verifica se a linha começa com get
+      if (strncmp(line, "get", 3) == 0)
+      {
+         r = sscanf(line, "get %2s%d index ci%d to %2s%d", &arraySource, &arraySourceIndex, &arrayElementIndex, &arrayDestiny, &arrayDestinyIndex);
+
+         if (r == 5)
+         {
+            printf("Pegar valor de vetor\nDe:%s%d\nPosição:%d\nDestino:%s%d\n\n", arraySource, arraySourceIndex, arrayElementIndex, arrayDestiny, arrayDestinyIndex);
+         }
+         continue;
+      }
+      if (strncmp(line, "set", 3) == 0)
+      {
+         r = sscanf(line, "set %2s%d index ci%d with %2s%d", &arraySource, &arraySourceIndex, &arrayElementIndex, &arrayDestiny, &arrayDestinyIndex);
+
+         if (r == 5)
+         {
+            printf("Setar valor em um vetor\nEm:%s%d\nPosição:%d\nValor:%s%d\n\n", arraySource, arraySourceIndex, arrayElementIndex, arrayDestiny, arrayDestinyIndex);
          }
          continue;
       }
