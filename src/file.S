@@ -21,12 +21,6 @@ f2:
 
    leave
    ret
-f3:
-   pushq %rbp
-   movq %rsp, rbp
-
-   leave
-   ret
 
    # return 0
    movl $0, %%eax
