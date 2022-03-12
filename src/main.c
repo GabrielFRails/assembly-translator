@@ -7,7 +7,6 @@
 FILE *fp;
 void remove_newline(char *ptr);
 void initial_print();
-void final_print();
 void end_function();
 void init_function();
 void process_variables_int(char line[256], int count);
@@ -91,6 +90,5 @@ int main()
          continue;
       }
    }
-   final_print();
    return 0;
 }
