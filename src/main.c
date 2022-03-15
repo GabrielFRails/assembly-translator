@@ -1,23 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "functions.h"
+#include "variables.h"
+#include "general.h"
 
 #define LINESZ 256
 
 FILE *fp;
-void remove_newline(char *ptr);
-void initial_print();
-void end_function();
-void init_function();
-void process_variables_int(char line[256], int count);
-void process_variables_array(char line[256], int count);
-void process_get_array(char line[256], int count);
-void process_set_array(char line[256], int count);
-void process_start_variables(char line[256], int count);
-void process_end_variables(char line[256], int count);
-void process_start_function(char line[256], int count);
-void process_end_function(char line[256], int count);
-void process_return(char line[256], int count);
+
 int main()
 {
    char line[LINESZ];
@@ -34,14 +25,14 @@ int main()
       // verifica se a linha começa com 'def'
       if (strncmp(line, "def", 3) == 0)
       {
-         process_start_variables(line, count);
+         process_local_variables_start(line, count);
          continue;
       }
 
       // Verifica se a linha lida começa com var
       if (strncmp(line, "var", 3) == 0)
       {
-         process_variables_int(line, count);
+         process_local_int_variables(line, count);
          continue;
       }
       // Verifica se a linha lida começa com vet
@@ -66,7 +57,7 @@ int main()
       // verifica se a linha começa com 'enddef'
       if (strncmp(line, "enddef", 6) == 0)
       {
-         process_end_variables(line, count);
+         process_local_variables_end(line, count);
          continue;
       }
 
@@ -79,14 +70,14 @@ int main()
       // Verifica se line começa com 'end' (3 letras)
       if (strncmp(line, "end", 3) == 0)
       {
-         process_end_function(line, count);
+         process_function_end(line, count);
          continue;
       }
 
       // verifica se a linha começa com 'function'
       if (strncmp(line, "function", 8) == 0)
       {
-         process_start_function(line, count);
+         process_function_start(line, count);
          continue;
       }
    }

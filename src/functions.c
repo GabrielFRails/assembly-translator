@@ -1,23 +1,8 @@
-#ifndef __ASSEMBLY_FUNCTIONS
-#define __ASSEMBLY_FUNCTIONS
 #include <stdio.h>
 #include <string.h>
-void init_function();
-void end_function();
+#include "functions.h"
 
-void process_start_variables(char line[256], int count)
-{
-  printf("Linha %d: %s\n", count, line);
-  printf("Definição escopo de função: {\n");
-  printf("---\n");
-}
-void process_end_variables(char line[256], int count)
-{
-  printf("}\nLinha %d: %s\n", count, line);
-  printf("Fim da definição de escopo:\n");
-  printf("---\n");
-}
-void process_start_function(char line[256], int count)
+void process_function_start(char line[256], int count)
 {
   FILE *fp;
   int r, s, i1, i2, i3;
@@ -40,13 +25,15 @@ void process_start_function(char line[256], int count)
     break;
   }
 }
-void process_end_function(char line[256], int count)
+
+void process_function_end(char line[256], int count)
 {
   end_function();
   printf("Linha %d: %s\n", count, line);
   printf("Fim da função\n");
   printf("---\n");
 }
+
 void process_return(char line[256], int count)
 {
   int ret; // para armazenar o  valor inteiro do retorno
@@ -88,4 +75,27 @@ void process_return(char line[256], int count)
     printf("array de inteiro, %c%c%d\n", r1, r2, ret);
   }
 }
-#endif
+
+void init_function()
+{
+   FILE *f;
+   char str1[] = "   pushq %rbp\n";
+   char str2[] = "   movq %rsp, rbp\n\n";
+
+   f = fopen("file.S", "a+");
+   fprintf(f, "%s", str1);
+   fprintf(f, "%s", str2);
+   fclose(f);
+}
+
+void end_function()
+{
+   FILE *f;
+   char str1[] = "   leave\n";
+   char str2[] = "   ret\n";
+
+   f = fopen("file.S", "a+");
+   fprintf(f, "%s", str1);
+   fprintf(f, "%s", str2);
+   fclose(f);
+}
