@@ -4,6 +4,7 @@
 #include "functions.h"
 #include "variables.h"
 #include "general.h"
+#include "arrays.h"
 
 #define LINESZ 256
 
@@ -38,19 +39,19 @@ int main()
       // Verifica se a linha lida começa com vet
       if (strncmp(line, "vet", 3) == 0)
       {
-         process_variables_array(line, count);
+         process_array_variables(line, count);
          continue;
       }
       // verifica se a linha começa com get
       if (strncmp(line, "get", 3) == 0)
       {
-         process_get_array(line, count);
+         process_get_array_element(line, count);
          continue;
       }
       // verifica se a linha começa com set
       if (strncmp(line, "set", 3) == 0)
       {
-         process_set_array(line, count);
+         process_set_array_element(line, count);
          continue;
       }
 

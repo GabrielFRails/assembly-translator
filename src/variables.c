@@ -3,9 +3,8 @@
 
 void process_local_int_variables(char line[256], int count)
 {
-  char variableIndex,
-      vi1, vi2, vi3, vi4, vi5;
-  int r;
+  char vi1, vi2, vi3, vi4, vi5;
+  int r, variableIndex;
   r = sscanf(line, "var vi%d", &variableIndex);
   if (r == 1)
   {

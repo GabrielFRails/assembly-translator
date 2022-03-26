@@ -1,8 +1,7 @@
-#ifndef __ASSEMBLY_ARRAYS
-#define __ASSEMBLY_ARRAYS
 #include <stdio.h>
+#include "arrays.h"
 
-void process_variables_array(char line[256], int count)
+void process_array_variables(char line[256], int count)
 {
   int vetSize, variableIndex, r, va1, va2, va3, va4, va5;
   r = sscanf(line, "vet %d size ci%d", &variableIndex, &vetSize);
@@ -26,7 +25,8 @@ void process_variables_array(char line[256], int count)
     printf("---\n");
   }
 }
-void process_get_array(char line[256], int count)
+
+void process_get_array_element(char line[256], int count)
 {
   char arraySource[3], arrayDestiny[3];
   int arraySourceIndex, arrayDestinyIndex, arrayElementIndex, r;
@@ -37,7 +37,8 @@ void process_get_array(char line[256], int count)
     printf("Pegar valor de vetor\nDe:%s%d\nPosição:%d\nDestino:%s%d\n\n", arraySource, arraySourceIndex, arrayElementIndex, arrayDestiny, arrayDestinyIndex);
   }
 }
-void process_set_array(char line[256], int count)
+
+void process_set_array_element(char line[256], int count)
 {
   char arraySource[3], arrayDestiny[3];
   int arraySourceIndex, arrayDestinyIndex, arrayElementIndex, r;
@@ -48,4 +49,3 @@ void process_set_array(char line[256], int count)
     printf("Setar valor em um vetor\nEm:%s%d\nPosição:%d\nValor:%s%d\n\n", arraySource, arraySourceIndex, arrayElementIndex, arrayDestiny, arrayDestinyIndex);
   }
 }
-#endif

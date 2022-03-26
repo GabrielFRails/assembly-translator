@@ -5,14 +5,16 @@
 .text
 
 f1:
-   pushq %rbp
-   movq %rsp, rbp
+	pushq %rbp
+	movq %rsp, rbp
 
-   leave
-   ret
+	movl $10, %eax
+	leave
+	ret
 f2:
-   pushq %rbp
-   movq %rsp, rbp
+	pushq %rbp
+	movq %rsp, rbp
 
-   leave
-   ret
+	movl %edi, %eax
+	leave
+	ret

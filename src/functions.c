@@ -43,44 +43,60 @@ void process_return(char line[256], int count)
   char v1,
       v2, v3;
   int r, s, i1, i2, i3, t;
+  char registrador[4] = "";
 
   fp = fopen("file.S", "a+");
   t = sscanf(line, "return %c%c%d", &r1, &r2, &ret);
   switch (r1)
   {
   case 112: // p na tabela ascii
-    printf("retorno de parâmetro: ");
+    if (r2 == 'i') {
+      switch (ret)
+      {
+        case 1:
+          strcpy(registrador, "edi");
+          break;
+        case 2:
+          strcpy(registrador, "esi");
+          break;
+        case 3:
+          strcpy(registrador, "edx");
+          break;
+        case 4:
+          strcpy(registrador, "ecx");
+          break;
+        case 5:
+          strcpy(registrador, "r8d");
+          break;
+        default:
+          strcpy(registrador, "xxx");
+          break;
+      }
+      fprintf(fp, "%s%s%s", "\tmovl %", registrador, ", %eax\n");
+    } else if (r2 == 'a') {
+      printf("retorno de param array\n");
+    }
     break;
   case 118: // v na tabela ascii
     printf("retorno de variável do escopo da função: ");
     break;
   case 99: // c na tabela ascii
     printf("retorno de constante: ");
+    fprintf(fp, "%s%d%s", "\tmovl $", ret, ", %eax\n");
     break;
   default:
     printf("retorno inválido\n");
     break;
   }
 
-  if (r2 == 105 && r1 == 99)
-  { // i n a tabela ascii && c na tabela ascii
-    printf("inteiro, valor: %d\n", ret);
-  }
-  else if (r2 == 105 && r1 != 99)
-  {
-    printf("inteiro, %c%c%d\n", r1, r2, ret);
-  }
-  else if (r2 == 97)
-  { // a na tabela ascii
-    printf("array de inteiro, %c%c%d\n", r1, r2, ret);
-  }
+  fclose(fp);
 }
 
 void init_function()
 {
    FILE *f;
-   char str1[] = "   pushq %rbp\n";
-   char str2[] = "   movq %rsp, rbp\n\n";
+   char str1[] = "\tpushq %rbp\n";
+   char str2[] = "\tmovq %rsp, rbp\n\n";
 
    f = fopen("file.S", "a+");
    fprintf(f, "%s", str1);
@@ -91,8 +107,8 @@ void init_function()
 void end_function()
 {
    FILE *f;
-   char str1[] = "   leave\n";
-   char str2[] = "   ret\n";
+   char str1[] = "\tleave\n";
+   char str2[] = "\tret\n";
 
    f = fopen("file.S", "a+");
    fprintf(f, "%s", str1);
