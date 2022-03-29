@@ -81,6 +81,11 @@ int main()
          process_function_start(line, count);
          continue;
       }
+
+      //verifica se linha começa com 'if'
+      if (strncmp(line, "if", 2) == 0) {
+         process_if(line, count);
+      }
    }
    return 0;
 }

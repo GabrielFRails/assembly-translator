@@ -92,6 +92,36 @@ void process_return(char line[256], int count)
   fclose(fp);
 }
 
+void process_if(char line[256], int count) {
+  FILE *fp;
+  int comp; //int para armazenar a comparação
+  int t; //variável de controle dentro da função
+  int r;
+  char v1, v2,
+  fp = fopen("file.S", "a+");
+
+  t = sscanf(line, "if %c%c%d", &v1, &v2, &r);
+
+  if (v1 == 'p') {
+    //condição com parâmetro
+  } else if (v1 = 'v') {
+    //condição com variável local
+  } else if (v1 = 'c') {
+    //condição com constante insteira
+    
+  }
+}
+
+void init_if(int value) {
+  FILE *f;
+  char str1 = "\tcmpl ";
+  char str2 = "begin_if:";
+
+  f = fopen("file.S", "a+");
+  fprintf(f, "%s%d%s%s", str1, value, ", $0\n", "\tjne end_if");
+  fprintf(f, "%s", "end_if");
+}
+
 void init_function()
 {
    FILE *f;
