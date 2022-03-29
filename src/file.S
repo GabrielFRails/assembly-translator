@@ -15,6 +15,24 @@ f2:
 	pushq %rbp
 	movq %rsp, rbp
 
+	# vi1 -> -4(%rbp)
+	# vi2 -> -8(%rbp)
+	# vi4 -> -12(%rbp)
 	movl %edi, %eax
+	leave
+	ret
+f3:
+	pushq %rbp
+	movq %rsp, rbp
+
+	# vi1 -> -4(%rbp)
+	# va2[0] -> -44(%rbp)
+	# va2[1] -> -40(%rbp)
+	# va2[2] -> -36(%rbp)
+	cmpl 10, $0
+	jne end_if
+end_if:
+
+	movl $10, %eax
 	leave
 	ret

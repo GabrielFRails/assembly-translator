@@ -7,9 +7,6 @@ void process_function_start(char line[256], int count)
   FILE *fp;
   int r, s, i1, i2, i3;
   char v1, v2, v3;
-  printf("Declaração de uma função:\n");
-  printf("Linha %d: %s\n", count, line);
-  printf("---\n");
   r = sscanf(line, "function f%d p%c%d p%c%d p%c%d", &s, &v1, &i1, &v2, &i2, &v3, &i3);
 
   fp = fopen("file.S", "a+");
@@ -21,7 +18,6 @@ void process_function_start(char line[256], int count)
   {
   case 7:
     printf("Parâmetros da função f%d: %c%d, %c%d, %c%d\n", s, v1, i1, v2, i2, v3, i3);
-    printf("---\n");
     break;
   }
 }
@@ -29,9 +25,6 @@ void process_function_start(char line[256], int count)
 void process_function_end(char line[256], int count)
 {
   end_function();
-  printf("Linha %d: %s\n", count, line);
-  printf("Fim da função\n");
-  printf("---\n");
 }
 
 void process_return(char line[256], int count)
@@ -93,55 +86,56 @@ void process_return(char line[256], int count)
 }
 
 void process_if(char line[256], int count) {
-  FILE *fp;
   int comp; //int para armazenar a comparação
   int t; //variável de controle dentro da função
   int r;
-  char v1, v2,
-  fp = fopen("file.S", "a+");
+  char v1, v2;
 
   t = sscanf(line, "if %c%c%d", &v1, &v2, &r);
-
   if (v1 == 'p') {
     //condição com parâmetro
-  } else if (v1 = 'v') {
+  } else if (v1 == 'v') {
     //condição com variável local
-  } else if (v1 = 'c') {
-    //condição com constante insteira
-    
+  } else if (v1 == 'c') {
+    printf("entrou aqui\n");
+    init_if(r);
   }
 }
 
 void init_if(int value) {
   FILE *f;
-  char str1 = "\tcmpl ";
-  char str2 = "begin_if:";
+  char str1[] = "\tcmpl ";
 
   f = fopen("file.S", "a+");
-  fprintf(f, "%s%d%s%s", str1, value, ", $0\n", "\tjne end_if");
-  fprintf(f, "%s", "end_if");
+  fprintf(f, "%s%d%s%s", str1, value, ", $0\n", "\tjne end_if\n");
+  fclose(f);
+}
+
+void process_end_if() {
+  FILE *f = fopen("file.S", "a+");
+  fprintf(f, "%s", "end_if:\n\n");
+  fclose(f);
 }
 
 void init_function()
 {
-   FILE *f;
-   char str1[] = "\tpushq %rbp\n";
-   char str2[] = "\tmovq %rsp, rbp\n\n";
+  FILE *f;
+  char str1[] = "\tpushq %rbp\n";
+  char str2[] = "\tmovq %rsp, rbp\n\n";
 
-   f = fopen("file.S", "a+");
-   fprintf(f, "%s", str1);
-   fprintf(f, "%s", str2);
-   fclose(f);
+  f = fopen("file.S", "a+");
+  fprintf(f, "%s", str1);
+  fprintf(f, "%s", str2);
+  fclose(f);
 }
 
 void end_function()
 {
-   FILE *f;
-   char str1[] = "\tleave\n";
-   char str2[] = "\tret\n";
-
-   f = fopen("file.S", "a+");
-   fprintf(f, "%s", str1);
-   fprintf(f, "%s", str2);
-   fclose(f);
+  FILE *f;
+  char str1[] = "\tleave\n";
+  char str2[] = "\tret\n";
+  f = fopen("file.S", "a+");
+  fprintf(f, "%s", str1);
+  fprintf(f, "%s", str2);
+  fclose(f);
 }

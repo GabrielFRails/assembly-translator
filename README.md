@@ -6,7 +6,7 @@ Final project of the "Basic Software" course, that consists in create an interpr
 
 ```
 cd src/
-gcc main.c arrays.c functions.c general.c string_functions.c statements.c variables.c -o tradutor
+gcc main.c arrays.c functions.c general.c statements.c variables.c -o tradutor
 ```
 
 ## How to run

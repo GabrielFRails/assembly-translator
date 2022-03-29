@@ -38,4 +38,22 @@ void init_function();
  */
 void end_function();
 
+/**
+ * @brief comelça o processamento para a trudução do if
+ * 
+ */
+void process_if(char line[256], int count);
+
+/**
+ * @brief inicia o print do if
+ * 
+ */
+void init_if(int value);
+
+/**
+ * @brief processa o fim de um if
+ * 
+ */
+void process_end_if();
+
 #endif
