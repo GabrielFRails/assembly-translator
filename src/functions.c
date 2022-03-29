@@ -3,6 +3,7 @@
 #include "functions.h"
 
 int wich_if = 0;
+int thereIsFunctionCall = 0; // "booleano" para saber se temos ou não chamada de função
 
 void process_function_start(char line[256], int count)
 {

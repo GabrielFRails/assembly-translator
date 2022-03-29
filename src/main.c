@@ -22,7 +22,7 @@ int main()
       count++;
       remove_newline(line);
 
-      // verifica se a linha começa com 'def'
+      // verifica se a linha começa com 'def' e analisar o corpo da definição da função
       if (strncmp(line, "def", 3) == 0)
       {
          fgets(line, LINESZ, stdin);
@@ -38,6 +38,24 @@ int main()
          printf("tamanho da pilha: %d\n", size_pile);
          size_pile = 0;
          //process_local_variables_end(line, count);
+         continue;
+      }
+
+      //verifica se a linha começa com enddef para analisar o corpo de instruções da função
+      if (strncmp(line, "enddef", 6) == 0) 
+      {
+
+         fgets(line, LINESZ, stdin);
+         remove_newline(line);
+         
+         while(strncmp(line, "end", 3) != 0 && (strncmp(line, "endif", 5) != 0)) 
+         {
+            //verifica se a linha começa com call 
+            if (strncmp(line, "call", 4) == 0) {
+               continue;
+            }
+         }
+
          continue;
       }
 
@@ -77,12 +95,14 @@ int main()
       }
 
       //verifica se linha começa com 'if'
-      if (strncmp(line, "if", 2) == 0) {
+      if (strncmp(line, "if", 2) == 0) 
+      {
          process_if(line, count);
          continue;
       }
       //verifica se a linha começa com endif
-      if (strncmp(line, "endif", 5) == 0) {
+      if (strncmp(line, "endif", 5) == 0) 
+      {
          process_end_if();
          continue;
       }
