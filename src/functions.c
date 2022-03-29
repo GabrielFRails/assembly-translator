@@ -2,6 +2,8 @@
 #include <string.h>
 #include "functions.h"
 
+int wich_if = 0;
+
 void process_function_start(char line[256], int count)
 {
   FILE *fp;
@@ -74,7 +76,6 @@ void process_return(char line[256], int count)
     printf("retorno de variável do escopo da função: ");
     break;
   case 99: // c na tabela ascii
-    printf("retorno de constante: ");
     fprintf(fp, "%s%d%s", "\tmovl $", ret, ", %eax\n");
     break;
   default:
@@ -86,6 +87,7 @@ void process_return(char line[256], int count)
 }
 
 void process_if(char line[256], int count) {
+  wich_if++;
   int comp; //int para armazenar a comparação
   int t; //variável de controle dentro da função
   int r;
@@ -93,27 +95,65 @@ void process_if(char line[256], int count) {
 
   t = sscanf(line, "if %c%c%d", &v1, &v2, &r);
   if (v1 == 'p') {
-    //condição com parâmetro
+    init_if_parametro(r);
   } else if (v1 == 'v') {
     //condição com variável local
   } else if (v1 == 'c') {
-    printf("entrou aqui\n");
-    init_if(r);
+    init_if_constante(r);
   }
 }
 
-void init_if(int value) {
+void init_if_parametro(int param) {
   FILE *f;
+
+  char str1[] = "\tcmpl %";
+
+  char registrador[4] = "";
+  switch (param) //veririca qual parâmetro foi passado para podermos saber qual registrador usar na comparação
+      {
+        case 1:
+          strcpy(registrador, "edi");
+          break;
+        case 2:
+          strcpy(registrador, "esi");
+          break;
+        case 3:
+          strcpy(registrador, "edx");
+          break;
+        case 4:
+          strcpy(registrador, "ecx");
+          break;
+        case 5:
+          strcpy(registrador, "r8d");
+          break;
+        default:
+          strcpy(registrador, "xxx");
+          break;
+      }
+  f = fopen("file.S", "a+");
+  fprintf(f, "%s%s%s%s%d\n", str1, registrador, ", $0\n", "\tjne end_if", wich_if);
+  fclose(f);
+}
+
+void init_if_constante(int value) {
+  FILE *f;
+
   char str1[] = "\tcmpl ";
 
   f = fopen("file.S", "a+");
-  fprintf(f, "%s%d%s%s", str1, value, ", $0\n", "\tjne end_if\n");
+  fprintf(f, "%s%d%s%s%d\n", str1, value, ", $0\n", "\tjne end_if", wich_if);
   fclose(f);
 }
 
 void process_end_if() {
   FILE *f = fopen("file.S", "a+");
-  fprintf(f, "%s", "end_if:\n\n");
+  char str1[10] = "\nend_if";
+  char str2[10];
+
+  sprintf(str2, "%d:\n\n", wich_if);
+  strcat(str1, str2);
+
+  fprintf(f, "%s", str1);
   fclose(f);
 }
 

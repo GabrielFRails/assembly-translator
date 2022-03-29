@@ -83,7 +83,7 @@ int main()
       }
       //verifica se a linha começa com endif
       if (strncmp(line, "endif", 5) == 0) {
-         process_end_if(line, count);
+         process_end_if();
          continue;
       }
    }

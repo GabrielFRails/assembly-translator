@@ -29,9 +29,20 @@ f3:
 	# va2[0] -> -44(%rbp)
 	# va2[1] -> -40(%rbp)
 	# va2[2] -> -36(%rbp)
+	cmpl %edi, $0
+	jne end_if1
+
+end_if1:
+
+	cmpl %esi, $0
+	jne end_if2
+
+end_if2:
+
 	cmpl 10, $0
-	jne end_if
-end_if:
+	jne end_if3
+
+end_if3:
 
 	movl $10, %eax
 	leave

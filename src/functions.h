@@ -45,13 +45,19 @@ void end_function();
 void process_if(char line[256], int count);
 
 /**
- * @brief inicia o print do if
- * 
+ * @brief inicia a tradução do if para assembly com valor 
+ *        constante na comparação
  */
-void init_if(int value);
+void init_if_constante(int value);
 
 /**
- * @brief processa o fim de um if
+ * @brief inicia a tradução de um para assemlby usando o valor 
+ *        de um parâmetro inteiro passado para a função
+ */
+void init_if_parametro(int param);
+
+/**
+ * @brief traduz o fim de um if, traduzing a flag para o arquivo assembly
  * 
  */
 void process_end_if();

@@ -13,12 +13,18 @@ enddef
 return pi1
 end
 
-function f3
+function f3 pi1 pi2
 def
 var vi1
 vet va2 size ci10
 enddef
 vi1 = ci3
+if pi1
+get va2 index ci8 to vi1
+endif
+if pi2
+get va2 index ci8 to vi1
+endif
 if ci10
 get va2 index ci8 to vi1
 endif
