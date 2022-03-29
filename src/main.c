@@ -40,25 +40,7 @@ int main()
          //process_local_variables_end(line, count);
          continue;
       }
-
-      //verifica se a linha começa com enddef para analisar o corpo de instruções da função
-      if (strncmp(line, "enddef", 6) == 0) 
-      {
-
-         fgets(line, LINESZ, stdin);
-         remove_newline(line);
-         
-         while(strncmp(line, "end", 3) != 0 && (strncmp(line, "endif", 5) != 0)) 
-         {
-            //verifica se a linha começa com call 
-            if (strncmp(line, "call", 4) == 0) {
-               continue;
-            }
-         }
-
-         continue;
-      }
-
+      
       // verifica se a linha começa com get
       if (strncmp(line, "get", 3) == 0)
       {

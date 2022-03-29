@@ -47,3 +47,19 @@ end_if3:
 	movl $10, %eax
 	leave
 	ret
+f4:
+	pushq %rbp
+	movq %rsp, rbp
+
+	# vi1 -> -4(%rbp)
+	# vi2 -> -8(%rbp)
+	# va3[0] -> -128(%rbp)
+	# va3[1] -> -124(%rbp)
+	# va3[2] -> -120(%rbp)
+	# va3[3] -> -116(%rbp)
+	# va3[4] -> -112(%rbp)
+	# va3[5] -> -108(%rbp)
+	# va3[6] -> -104(%rbp)
+	# va3[7] -> -100(%rbp)
+	leave
+	ret
