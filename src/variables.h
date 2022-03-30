@@ -2,11 +2,12 @@
 #define __VARIABLES__
 
 /**
- * @brief processa as declarações de variáveis locais em funções
+ * @brief 
  * 
- * @param line linha a ser processada
- * @param count número da linha
+ * @param line 
+ * @param size_pile 
+ * @param addrs 
  */
-void process_local_int_variables(char line[256], int * size_pile);
+void process_local_int_variables(char line[256], int * size_pile, int * addrs);
 
 #endif

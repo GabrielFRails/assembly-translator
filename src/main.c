@@ -5,66 +5,66 @@
 #include "variables.h"
 #include "general.h"
 #include "arrays.h"
+#include "statements.h"
 
 #define LINESZ 256
 
 int main()
 {
    char line[LINESZ];
-   int count = 0;
    int size_pile = 0;
+   int vl_addrs[5] = {0};
 
    initial_print();
 
    // lê uma linha de cada vez
    while (fgets(line, LINESZ, stdin) != NULL)
    {
-      count++;
       remove_newline(line);
 
-      // verifica se a linha começa com 'def' e analisar o corpo da definição da função
+      // verifica se a linha começa com 'def' e processa a declaração de variáveis locais
       if (strncmp(line, "def", 3) == 0)
       {
          fgets(line, LINESZ, stdin);
          remove_newline(line);
-         //process_local_variables_start(line, count);
 
+         size_pile = 0;
+         for(int i=0; i<5; i++){
+            vl_addrs[i] = 0;
+         }
          while(strncmp(line, "enddef", 6) != 0){
-            process_local_int_variables(line, &size_pile);
+            process_local_int_variables(line, &size_pile, vl_addrs);
             fgets(line, LINESZ, stdin);
             remove_newline(line);
          }
-         
-         printf("tamanho da pilha: %d\n", size_pile);
-         size_pile = 0;
-         //process_local_variables_end(line, count);
+
          continue;
       }
       
       // verifica se a linha começa com get
       if (strncmp(line, "get", 3) == 0)
       {
-         process_get_array_element(line, count);
+         process_get_array_element(line, vl_addrs);
          continue;
       }
       // verifica se a linha começa com set
       if (strncmp(line, "set", 3) == 0)
       {
-         process_set_array_element(line, count);
+         process_set_array_element(line, vl_addrs);
          continue;
       }
 
       // verifica se a linha começa com 'return'
       if (strncmp(line, "return", 6) == 0)
       {
-         process_return(line, count);
+         process_return(line, vl_addrs);
       }
 
       // Verifica se line começa com 'end' (3 letras)
       if (strncmp(line, "end", 3) == 0)
       {
          if ((strncmp(line, "endif", 5) != 0)) {
-            process_function_end(line, count);
+            process_function_end(line);
             continue;
          }
       }
@@ -72,20 +72,30 @@ int main()
       // verifica se a linha começa com 'function'
       if (strncmp(line, "function", 8) == 0)
       {
-         process_function_start(line, count);
+         process_function_start(line);
          continue;
       }
 
       //verifica se linha começa com 'if'
       if (strncmp(line, "if", 2) == 0) 
       {
-         process_if(line, count);
+         process_if(line);
          continue;
       }
       //verifica se a linha começa com endif
       if (strncmp(line, "endif", 5) == 0) 
       {
          process_end_if();
+         continue;
+      }
+
+      if (strstr(line, "=") != NULL){
+         if( strstr(line, "call") != NULL){
+            printf("atribuição com chamada de função\n");
+         }
+         else{
+            process_simple_attr(line, vl_addrs);
+         }
          continue;
       }
    }

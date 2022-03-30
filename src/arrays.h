@@ -7,7 +7,7 @@
  * @param line 
  * @param count 
  */
-void process_array_variables(char line[256], int count);
+void process_array_variables(char line[256]);
 
 /**
  * @brief Processa a leitura de um elemento do array
@@ -15,7 +15,7 @@ void process_array_variables(char line[256], int count);
  * @param line 
  * @param count 
  */
-void process_get_array_element(char line[256], int count);
+void process_get_array_element(char line[256], int * addrs);
 
 /**
  * @brief Atribui um valor a um elemento de um array
@@ -23,6 +23,6 @@ void process_get_array_element(char line[256], int count);
  * @param line 
  * @param count 
  */
-void process_set_array_element(char line[256], int count);
+void process_set_array_element(char line[256], int * addrs);
 
 #endif

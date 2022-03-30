@@ -8,7 +8,7 @@ function f2 pi1
 def
 var vi1
 var vi2
-var vi4
+var vi3
 enddef
 return pi1
 end
@@ -19,15 +19,17 @@ var vi1
 vet va2 size ci10
 enddef
 vi1 = ci3
+vi1 = pi1 - pi2
 if pi1
 get va2 index ci8 to vi1
 endif
 if pi2
-get va2 index ci8 to vi1
+get va2 index ci5 to pi1
 endif
 if ci10
-get va2 index ci8 to vi1
+get va2 index ci2 to pi2
 endif
+set va2 index ci9 with pi2
 return ci10
 end
 
@@ -37,7 +39,12 @@ var vi1
 var vi2
 vet va3 size ci30
 enddef
-vi1 = ci1
+get pa1 index ci2 to vi2
+set va3 index ci7 with vi1
+set pa1 index ci2 with vi2
+vi1 = vi2 + ci6
+vi1 = vi2 - ci1
+vi1 = vi2 * ci2
 vi2 = call f1 vi1 va3
 vi2 = call f1 ci5 pa1
 return vi2

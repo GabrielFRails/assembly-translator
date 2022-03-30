@@ -2,10 +2,10 @@
 #include <string.h>
 #include "functions.h"
 
-int wich_if = 0;
+int which_if = 0;
 int thereIsFunctionCall = 0; // "booleano" para saber se temos ou não chamada de função
 
-void process_function_start(char line[256], int count)
+void process_function_start(char line[256])
 {
   FILE *fp;
   int r, s, i1, i2, i3;
@@ -25,12 +25,12 @@ void process_function_start(char line[256], int count)
   }
 }
 
-void process_function_end(char line[256], int count)
+void process_function_end(char line[256])
 {
   end_function();
 }
 
-void process_return(char line[256], int count)
+void process_return(char line[256], int * addrs)
 {
   int ret; // para armazenar o  valor inteiro do retorno
            //}
@@ -43,6 +43,8 @@ void process_return(char line[256], int count)
 
   fp = fopen("file.S", "a+");
   t = sscanf(line, "return %c%c%d", &r1, &r2, &ret);
+
+  fprintf(fp, "\n\t# %s\n", line);
   switch (r1)
   {
   case 112: // p na tabela ascii
@@ -74,7 +76,7 @@ void process_return(char line[256], int count)
     }
     break;
   case 118: // v na tabela ascii
-    printf("retorno de variável do escopo da função: ");
+    fprintf(fp, "\tmovl %d(%%rbp), %%eax\n", addrs[ret-1]);
     break;
   case 99: // c na tabela ascii
     fprintf(fp, "%s%d%s", "\tmovl $", ret, ", %eax\n");
@@ -87,8 +89,8 @@ void process_return(char line[256], int count)
   fclose(fp);
 }
 
-void process_if(char line[256], int count) {
-  wich_if++;
+void process_if(char line[256]) {
+  which_if++;
   int comp; //int para armazenar a comparação
   int t; //variável de controle dentro da função
   int r;
@@ -132,7 +134,8 @@ void init_if_parametro(int param) {
           break;
       }
   f = fopen("file.S", "a+");
-  fprintf(f, "%s%s%s%s%d\n", str1, registrador, ", $0\n", "\tjne end_if", wich_if);
+  fprintf(f, "\t# if no. %d\n", which_if);
+  fprintf(f, "%s%s%s%s%d\n", str1, registrador, ", $0\n", "\tjne end_if", which_if);
   fclose(f);
 }
 
@@ -142,7 +145,8 @@ void init_if_constante(int value) {
   char str1[] = "\tcmpl ";
 
   f = fopen("file.S", "a+");
-  fprintf(f, "%s%d%s%s%d\n", str1, value, ", $0\n", "\tjne end_if", wich_if);
+  fprintf(f, "\t# if no. %d\n", which_if);
+  fprintf(f, "%s%d%s%s%d\n", str1, value, ", $0\n", "\tjne end_if", which_if);
   fclose(f);
 }
 
@@ -151,7 +155,7 @@ void process_end_if() {
   char str1[10] = "\nend_if";
   char str2[10];
 
-  sprintf(str2, "%d:\n\n", wich_if);
+  sprintf(str2, "%d:\n\n", which_if);
   strcat(str1, str2);
 
   fprintf(f, "%s", str1);
