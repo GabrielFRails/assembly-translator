@@ -13,7 +13,7 @@ int main()
 {
    char line[LINESZ];
    int size_pile = 0;
-   int vl_addrs[5] = {0};
+   int vl_addrs[5] = {0}, param_addrs[3] = {0}, param_types[3] = {0};
 
    initial_print();
 
@@ -37,6 +37,8 @@ int main()
             fgets(line, LINESZ, stdin);
             remove_newline(line);
          }
+         
+         allocate_pile(&size_pile, param_types, param_addrs);
 
          continue;
       }
@@ -72,7 +74,11 @@ int main()
       // verifica se a linha começa com 'function'
       if (strncmp(line, "function", 8) == 0)
       {
-         process_function_start(line);
+         for(int i=0; i<3; i++){
+            param_addrs[i] = 0;
+            param_types[i] = 0;
+         }
+         process_function_start(line, param_types);
          continue;
       }
 
@@ -89,9 +95,10 @@ int main()
          continue;
       }
 
+      // verifica se a linha tem atribuição simples ou com chamada de função
       if (strstr(line, "=") != NULL){
          if( strstr(line, "call") != NULL){
-            printf("atribuição com chamada de função\n");
+            process_attr_with_function_call(line, param_addrs, vl_addrs);
          }
          else{
             process_simple_attr(line, vl_addrs);

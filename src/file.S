@@ -6,28 +6,33 @@
 
 f1:
 	pushq %rbp
-	movq %rsp, rbp
+	movq %rsp, %rbp
 
+	subq $0, %rsp
 
 	# return ci10
 	movl $10, %eax
 	leave
 	ret
+
 f2:
 	pushq %rbp
-	movq %rsp, rbp
+	movq %rsp, %rbp
 
 	# vi1 -> -4(%rbp)
 	# vi2 -> -8(%rbp)
 	# vi3 -> -12(%rbp)
+	# %edi -> -16(%rbp)
+	subq $16, %rsp
 
 	# return pi1
 	movl %edi, %eax
 	leave
 	ret
+
 f3:
 	pushq %rbp
-	movq %rsp, rbp
+	movq %rsp, %rbp
 
 	# vi1 -> -4(%rbp)
 	# va2[0] -> -44(%rbp)
@@ -40,6 +45,9 @@ f3:
 	# va2[7] -> -16(%rbp)
 	# va2[8] -> -12(%rbp)
 	# va2[9] -> -8(%rbp)
+	# %edi -> -48(%rbp)
+	# %esi -> -52(%rbp)
+	subq $64, %rsp
 
 	# vi1 = ci3
 	movl $3, -4(%rbp)
@@ -89,9 +97,10 @@ end_if3:
 	movl $10, %eax
 	leave
 	ret
+
 f4:
 	pushq %rbp
-	movq %rsp, rbp
+	movq %rsp, %rbp
 
 	# vi1 -> -4(%rbp)
 	# vi2 -> -8(%rbp)
@@ -125,6 +134,8 @@ f4:
 	# va3[27] -> -20(%rbp)
 	# va3[28] -> -16(%rbp)
 	# va3[29] -> -12(%rbp)
+	# %rdi -> -136(%rbp)
+	subq $144, %rsp
 
 	# get pa1 index ci2 to vi2
 	movq %rdi, %rax
@@ -157,7 +168,102 @@ f4:
 	imull $2, %eax
 	movl %eax, -4(%rbp)
 
+	# vi2 = call f1 vi1 va3
+	movl -4(%rbp), %edi
+	leaq -128(%rbp), %rsi
+	call f1
+	movl %eax -8(%rbp)
+
+	# vi2 = call f1 ci5 pa1
+	movl $5, %edi
+	leaq -136(%rbp), %rsi
+	call f1
+	movl %eax -8(%rbp)
+
 	# return vi2
 	movl -8(%rbp), %eax
 	leave
 	ret
+
+f5:
+	pushq %rbp
+	movq %rsp, %rbp
+
+	# vi1 -> -4(%rbp)
+	# vi2 -> -8(%rbp)
+	# vi3 -> -12(%rbp)
+	# va4[0] -> -32(%rbp)
+	# va4[1] -> -28(%rbp)
+	# va4[2] -> -24(%rbp)
+	# va4[3] -> -20(%rbp)
+	# va4[4] -> -16(%rbp)
+	# %edi -> -36(%rbp)
+	# %rsi -> -48(%rbp)
+	subq $48, %rsp
+
+	# vi1 = vi2 / ci2
+	movl -8(%rbp), %eax
+	cltd
+	movl $2, %ecx
+	idivl %ecx
+	movl %eax, -4(%rbp)
+
+	# vi2 = pi1 / vi1
+	movl %edi, %eax
+	cltd
+	idivl -4(%rbp)
+	movl %eax, -8(%rbp)
+
+	# get pa2 index ci3 to vi3
+	movq %rsi, %rax
+	addq $12, %rax
+	movl (%rax), %eax
+	movl %eax, -12(%rbp)
+
+	# vi3 = vi3 / pi1
+	movl -12(%rbp), %eax
+	cltd
+	idivl %edi
+	movl %eax, -12(%rbp)
+
+	# pi1 = pi1 / vi3
+	movl %edi, %eax
+	cltd
+	idivl -12(%rbp)
+	movl %eax, -4(%rbp)
+
+	# get va4 index ci3 to vi3
+	leaq -20(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, -12(%rbp)
+
+	# vi1 = vi2 / vi3
+	movl -8(%rbp), %eax
+	cltd
+	idivl -12(%rbp)
+	movl %eax, -4(%rbp)
+
+	# return vi1
+	movl -4(%rbp), %eax
+	leave
+	ret
+
+f6:
+	pushq %rbp
+	movq %rsp, %rbp
+
+	# vi1 -> -4(%rbp)
+	# vi2 -> -8(%rbp)
+	# %edi -> -12(%rbp)
+	subq $16, %rsp
+
+	# vi2 = call f2 vi1
+	movl -4(%rbp), %edi
+	call f2
+	movl %eax -8(%rbp)
+
+	# return vi1
+	movl -4(%rbp), %eax
+	leave
+	ret
+

@@ -15,4 +15,6 @@ void remove_newline(char *ptr);
  */
 void initial_print();
 
+void allocate_pile(int * size_pile, int * param_types, int * param_addrs);
+
 #endif

@@ -7,7 +7,7 @@
  * @param line 
  * @param count 
  */
-void process_function_start(char line[256]);
+void process_function_start(char line[256], int * param_types);
 
 /**
  * @brief processa a declaração de fim de uma função

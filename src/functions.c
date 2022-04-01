@@ -5,24 +5,37 @@
 int which_if = 0;
 int thereIsFunctionCall = 0; // "booleano" para saber se temos ou não chamada de função
 
-void process_function_start(char line[256])
+void process_function_start(char line[256], int * param_types)
 {
   FILE *fp;
-  int r, s, i1, i2, i3;
+  int r, s, i1 = 0, i2 = 0, i3 = 0;
   char v1, v2, v3;
-  r = sscanf(line, "function f%d p%c%d p%c%d p%c%d", &s, &v1, &i1, &v2, &i2, &v3, &i3);
+  sscanf(line, "function f%d p%c%d p%c%d p%c%d", &s, &v1, &i1, &v2, &i2, &v3, &i3);
+
+  //inteiro type 1
+  //array type 2
+  //nulo type 0
+
+  if(i1 != 0){
+    if(v1 == 'i') param_types[0] = 1;
+    else param_types[0] = 2;
+
+    if(i2 != 0){
+      if(v2 == 'i') param_types[1] = 1;
+      else param_types[1] = 2;
+
+      if(i3 != 0){
+        if(v3 == 'i') param_types[2] = 1;
+        else param_types[2] = 2;
+      }
+    }
+  }
 
   fp = fopen("file.S", "a+");
   fprintf(fp, "f%d:\n", s);
   fclose(fp);
   init_function();
 
-  switch (r)
-  {
-  case 7:
-    printf("Parâmetros da função f%d: %c%d, %c%d, %c%d\n", s, v1, i1, v2, i2, v3, i3);
-    break;
-  }
 }
 
 void process_function_end(char line[256])
@@ -166,7 +179,7 @@ void init_function()
 {
   FILE *f;
   char str1[] = "\tpushq %rbp\n";
-  char str2[] = "\tmovq %rsp, rbp\n\n";
+  char str2[] = "\tmovq %rsp, %rbp\n\n";
 
   f = fopen("file.S", "a+");
   fprintf(f, "%s", str1);
@@ -178,7 +191,7 @@ void end_function()
 {
   FILE *f;
   char str1[] = "\tleave\n";
-  char str2[] = "\tret\n";
+  char str2[] = "\tret\n\n";
   f = fopen("file.S", "a+");
   fprintf(f, "%s", str1);
   fprintf(f, "%s", str2);
