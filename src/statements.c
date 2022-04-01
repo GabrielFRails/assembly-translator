@@ -183,7 +183,7 @@ void process_simple_attr(char line[256], int * addrs){
     fclose(fp);
 }
 
-void process_attr_with_function_call(char line[256], int * addrsParams, int * addrVars)
+void process_attr_with_function_call(char line[256], int * addrsParams, int * addrVars, int * paramTypes)
 {
     FILE *fp = fopen("file.S", "a+");
     char destType, param1Type, param2Type, param3Type, param1DataType, param2DataType, param3DataType;
@@ -191,6 +191,26 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
 
     // %c%c%d => p/v/c | i/a | index ou valor da constante inteira
     t = sscanf(line, "%ci%d = call f%d %c%c%d %c%c%d %c%c%d", &destType, &destIndex, &functionIndex, &param1Type, &param1DataType, &indexParam1, &param2Type, &param2DataType, &indexParam2, &param3Type, &param3DataType, &indexParam3);
+    
+    if(paramTypes[0]) fprintf(fp, "\n\t# salvando parametros\n");
+
+    for(int i = 0; paramTypes[i]; i++){
+        switch(i){
+            case 0:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%edi, %d(%%rbp)\n", addrsParams[i]);
+                else fprintf(fp, "\tmovq %%rdi, %d(%%rbp)\n", addrsParams[i]);
+                break;
+            case 1:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%esi, %d(%%rbp)\n", addrsParams[i]);
+                else fprintf(fp, "\tmovq %%rsi, %d(%%rbp)\n", addrsParams[i]);
+                break;
+            case 2:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%edx, %d(%%rbp)\n", addrsParams[i]);
+                else fprintf(fp, "\tmovq %%rdx, %d(%%rbp)\n", addrsParams[i]);
+        }
+    }
+
+    
     fprintf(fp, "\n\t# %s\n", line);
     
     if( t >= 6)
@@ -312,6 +332,24 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
     fprintf(fp, "\tcall f%d\n", functionIndex);
     // movendo o resultado da função para o destino especificado
     fprintf(fp, "\tmovl %%eax %d(%%rbp)\n", addrVars[destIndex-1]);
+
+    if(paramTypes[0]) fprintf(fp, "\n\t# recuperando parametros\n");
+    
+    for(int i = 0; paramTypes[i]; i++){
+        switch(i){
+            case 0:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %d(%%rbp), %%edi\n", addrsParams[i]);
+                else fprintf(fp, "\tleaq %d(%%rbp), %%rdi\n", addrsParams[i]);
+                break;
+            case 1:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %d(%%rbp), %%esi\n", addrsParams[i]);
+                else fprintf(fp, "\tleaq %d(%%rbp), %%rsi\n", addrsParams[i]);
+                break;
+            case 2:
+                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %d(%%rbp), %%edx\n", addrsParams[i]);
+                else fprintf(fp, "\tleaq %d(%%rbp), %%rdx\n", addrsParams[i]);
+        }
+    }
 
     fclose(fp);
 }

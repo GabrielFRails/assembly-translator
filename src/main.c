@@ -98,7 +98,7 @@ int main()
       // verifica se a linha tem atribuição simples ou com chamada de função
       if (strstr(line, "=") != NULL){
          if( strstr(line, "call") != NULL){
-            process_attr_with_function_call(line, param_addrs, vl_addrs);
+            process_attr_with_function_call(line, param_addrs, vl_addrs, param_types);
          }
          else{
             process_simple_attr(line, vl_addrs);

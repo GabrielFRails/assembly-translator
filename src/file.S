@@ -168,17 +168,29 @@ f4:
 	imull $2, %eax
 	movl %eax, -4(%rbp)
 
+	# salvando parametros
+	movq %rdi, -136(%rbp)
+
 	# vi2 = call f1 vi1 va3
 	movl -4(%rbp), %edi
 	leaq -128(%rbp), %rsi
 	call f1
 	movl %eax -8(%rbp)
 
+	# recuperando parametros
+	leaq -136(%rbp), %rdi
+
+	# salvando parametros
+	movq %rdi, -136(%rbp)
+
 	# vi2 = call f1 ci5 pa1
 	movl $5, %edi
 	leaq -136(%rbp), %rsi
 	call f1
 	movl %eax -8(%rbp)
+
+	# recuperando parametros
+	leaq -136(%rbp), %rdi
 
 	# return vi2
 	movl -8(%rbp), %eax
@@ -257,10 +269,16 @@ f6:
 	# %edi -> -12(%rbp)
 	subq $16, %rsp
 
+	# salvando parametros
+	movl %edi, -12(%rbp)
+
 	# vi2 = call f2 vi1
 	movl -4(%rbp), %edi
 	call f2
 	movl %eax -8(%rbp)
+
+	# recuperando parametros
+	movl -12(%rbp), %edi
 
 	# return vi1
 	movl -4(%rbp), %eax
