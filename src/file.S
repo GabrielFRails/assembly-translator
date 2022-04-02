@@ -9,10 +9,7 @@ f1:
 	pushq %rbp
 	movq %rsp, %rbp
 
-	# %rdi -> -8(%rbp)
-	# %rsi -> -16(%rbp)
-	# %rdx -> -24(%rbp)
-	subq $32, %rsp
+	subq $0, %rsp
 
 	# return ci10
 	movl $10, %eax
@@ -28,9 +25,7 @@ f2:
 	# vi2 -> -8(%rbp)
 	# vi3 -> -12(%rbp)
 	# %rdi -> -24(%rbp)
-	# %rsi -> -32(%rbp)
-	# %rdx -> -40(%rbp)
-	subq $48, %rsp
+	subq $32, %rsp
 
 	# return pi1
 	movl %edi, %eax
@@ -55,8 +50,7 @@ f3:
 	# va2[9] -> -8(%rbp)
 	# %rdi -> -56(%rbp)
 	# %rsi -> -64(%rbp)
-	# %rdx -> -72(%rbp)
-	subq $80, %rsp
+	subq $64, %rsp
 
 	# vi1 = ci3
 	movl $3, -4(%rbp)
@@ -145,9 +139,7 @@ f4:
 	# va3[28] -> -16(%rbp)
 	# va3[29] -> -12(%rbp)
 	# %rdi -> -136(%rbp)
-	# %rsi -> -144(%rbp)
-	# %rdx -> -152(%rbp)
-	subq $160, %rsp
+	subq $144, %rsp
 
 	# get pa1 index ci2 to vi2
 	movq %rdi, %rax
@@ -224,8 +216,7 @@ f5:
 	# va4[4] -> -16(%rbp)
 	# %rdi -> -40(%rbp)
 	# %rsi -> -48(%rbp)
-	# %rdx -> -56(%rbp)
-	subq $64, %rsp
+	subq $48, %rsp
 
 	# vi1 = vi2 / ci2
 	movl -8(%rbp), %eax
@@ -282,9 +273,7 @@ f6:
 	# vi1 -> -4(%rbp)
 	# vi2 -> -8(%rbp)
 	# %rdi -> -16(%rbp)
-	# %rsi -> -24(%rbp)
-	# %rdx -> -32(%rbp)
-	subq $32, %rsp
+	subq $16, %rsp
 
 	# salvando parametros
 	movl %edi, -16(%rbp)
@@ -320,8 +309,7 @@ f7:
 	# va2[9] -> -8(%rbp)
 	# %rdi -> -56(%rbp)
 	# %rsi -> -64(%rbp)
-	# %rdx -> -72(%rbp)
-	subq $80, %rsp
+	subq $64, %rsp
 
 	# vi1 = ci3
 	movl $3, -4(%rbp)
