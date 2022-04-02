@@ -3,7 +3,6 @@
 #include "functions.h"
 
 int which_if = 0;
-int thereIsFunctionCall = 0; // "booleano" para saber se temos ou não chamada de função
 
 void process_function_start(char line[256], int * param_types)
 {
@@ -36,11 +35,6 @@ void process_function_start(char line[256], int * param_types)
   fclose(fp);
   init_function();
 
-}
-
-void process_function_end(char line[256])
-{
-  end_function();
 }
 
 void process_return(char line[256], int * addrs)
@@ -102,7 +96,7 @@ void process_return(char line[256], int * addrs)
   fclose(fp);
 }
 
-void process_if(char line[256]) {
+void process_if(char line[256], int * vl_addrs) {
   which_if++;
   int comp; //int para armazenar a comparação
   int t; //variável de controle dentro da função
@@ -113,7 +107,7 @@ void process_if(char line[256]) {
   if (v1 == 'p') {
     init_if_parametro(r);
   } else if (v1 == 'v') {
-    //condição com variável local
+    init_if_var_local(vl_addrs, r);
   } else if (v1 == 'c') {
     init_if_constante(r);
   }
@@ -148,7 +142,7 @@ void init_if_parametro(int param) {
       }
   f = fopen("file.S", "a+");
   fprintf(f, "\t# if no. %d\n", which_if);
-  fprintf(f, "%s%s%s%s%d\n", str1, registrador, ", $0\n", "\tjne end_if", which_if);
+  fprintf(f, "%s%s%s%s%d\n", str1, registrador, ", $0\n", "\tje end_if", which_if);
   fclose(f);
 }
 
@@ -159,7 +153,18 @@ void init_if_constante(int value) {
 
   f = fopen("file.S", "a+");
   fprintf(f, "\t# if no. %d\n", which_if);
-  fprintf(f, "%s%d%s%s%d\n", str1, value, ", $0\n", "\tjne end_if", which_if);
+  fprintf(f, "%s%d%s%s%d\n", str1, value, ", $0\n", "\tje end_if", which_if);
+  fclose(f);
+}
+
+void init_if_var_local(int * vl_addrs, int var_index) {
+  FILE *f = fopen("file.S", "a+");
+
+  char str1[] = "\tcmpl ";
+
+  fprintf(f, "\t# if no. %d\n", which_if);
+  fprintf(f, "%s%d(%%rbp) %s%s%d\n", str1, vl_addrs[var_index-1], ", $0\n", "\tje end_if", which_if);
+  
   fclose(f);
 }
 
@@ -187,7 +192,7 @@ void init_function()
   fclose(f);
 }
 
-void end_function()
+void process_function_end()
 {
   FILE *f;
   char str1[] = "\tleave\n";
@@ -196,4 +201,6 @@ void end_function()
   fprintf(f, "%s", str1);
   fprintf(f, "%s", str2);
   fclose(f);
+
+  which_if = 0;
 }
