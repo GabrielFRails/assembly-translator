@@ -58,7 +58,7 @@ f3:
 	movl %eax, -4(%rbp)
 	# if no. 1
 	cmpl %edi, $0
-	jne end_if1
+	je end_if1
 
 	# get va2 index ci8 to vi1
 	leaq -12(%rbp), %rax
@@ -69,7 +69,7 @@ end_if1:
 
 	# if no. 2
 	cmpl %esi, $0
-	jne end_if2
+	je end_if2
 
 	# get va2 index ci5 to pi1
 	leaq -24(%rbp), %rax
@@ -80,7 +80,7 @@ end_if2:
 
 	# if no. 3
 	cmpl 10, $0
-	jne end_if3
+	je end_if3
 
 	# get va2 index ci2 to pi2
 	leaq -36(%rbp), %rax
@@ -282,6 +282,93 @@ f6:
 
 	# return vi1
 	movl -4(%rbp), %eax
+	leave
+	ret
+
+f7:
+	pushq %rbp
+	movq %rsp, %rbp
+
+	# vi1 -> -4(%rbp)
+	# va2[0] -> -44(%rbp)
+	# va2[1] -> -40(%rbp)
+	# va2[2] -> -36(%rbp)
+	# va2[3] -> -32(%rbp)
+	# va2[4] -> -28(%rbp)
+	# va2[5] -> -24(%rbp)
+	# va2[6] -> -20(%rbp)
+	# va2[7] -> -16(%rbp)
+	# va2[8] -> -12(%rbp)
+	# va2[9] -> -8(%rbp)
+	# %edi -> -48(%rbp)
+	# %esi -> -52(%rbp)
+	subq $64, %rsp
+
+	# vi1 = ci3
+	movl $3, -4(%rbp)
+
+	# vi1 = pi1 - pi2
+	movl %edi, %eax
+	subl %esi, %eax
+	movl %eax, -4(%rbp)
+	# if no. 1
+	cmpl %edi, $0
+	je end_if1
+
+	# get va2 index ci8 to vi1
+	leaq -12(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, -4(%rbp)
+
+end_if1:
+
+	# if no. 2
+	cmpl %esi, $0
+	je end_if2
+
+	# get va2 index ci5 to pi1
+	leaq -24(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, %edi
+
+end_if2:
+
+	# if no. 3
+	cmpl 10, $0
+	je end_if3
+
+	# get va2 index ci2 to pi2
+	leaq -36(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, %esi
+
+end_if3:
+
+	# if no. 4
+	cmpl -4(%rbp) , $0
+	je end_if4
+
+	# get va2 index ci2 to pi1
+	leaq -36(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, %edi
+
+end_if4:
+
+	# if no. 5
+	cmpl -44(%rbp) , $0
+	je end_if5
+
+	# get va2 index ci2 to pi1
+	leaq -36(%rbp), %rax
+	movl (%rax), %eax
+	movl %eax, %edi
+
+end_if5:
+
+
+	# return ci10
+	movl $10, %eax
 	leave
 	ret
 
