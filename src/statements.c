@@ -222,7 +222,7 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                         fprintf(fp, "\tmovl %d(%%rbp), %%edi\n", addrVars[indexParam1-1]);
                         break;
                     case 'a':
-                        fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrVars[indexParam1-1]);
+                        fprintf(fp, "\tleaq %d(%%rbp), %%rdi\n", addrVars[indexParam1-1]);
                         break;
                 }
                 break;
@@ -239,9 +239,9 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'a':
                         if (indexParam1 == 2) 
                         {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrsParams[1]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%rdi\n", addrsParams[1]);
                         } else if (indexParam1 == 3) {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrsParams[2]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%rdi\n", addrsParams[2]);
                         }
                         break;
                 }
@@ -260,7 +260,7 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                         fprintf(fp, "\tmovl %d(%%rbp), %%esi\n", addrVars[indexParam2-1]);
                         break;
                     case 'a':
-                        fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrVars[indexParam2-1]);
+                        fprintf(fp, "\tleaq %d(%%rbp), %%rsi\n", addrVars[indexParam2-1]);
                         break;
                 }
                 break;
@@ -277,9 +277,9 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'a':
                         if (indexParam2 == 1) 
                         {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrsParams[0]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%rsi\n", addrsParams[0]);
                         } else if (indexParam2 == 3) {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrsParams[2]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%rsi\n", addrsParams[2]);
                         }
                         break;
                 }
@@ -299,7 +299,7 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                         fprintf(fp, "\tmovl %d(%%rbp), %%edx\n", addrVars[indexParam2-1]);
                         break;
                     case 'a':
-                        fprintf(fp, "\tmovq %d(%%rbp), %%edx\n", addrVars[indexParam2-1]);
+                        fprintf(fp, "\tleaq %d(%%rbp), %%edx\n", addrVars[indexParam2-1]);
                         break;
                 }
                 break;
@@ -316,9 +316,9 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'a':
                         if (indexParam3 == 1) 
                         {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%edx\n", addrsParams[0]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%edx\n", addrsParams[0]);
                         } else if (indexParam3 == 2) {
-                            fprintf(fp, "\tmovq %d(%%rbp), %%edx\n", addrsParams[1]);
+                            fprintf(fp, "\tleaq %d(%%rbp), %%edx\n", addrsParams[1]);
                         }
                         break;
                 }
