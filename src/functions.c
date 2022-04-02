@@ -31,6 +31,7 @@ void process_function_start(char line[256], int * param_types)
   }
 
   fp = fopen("file.S", "a+");
+  fprintf(fp, ".globl f%d\n", s);
   fprintf(fp, "f%d:\n", s);
   fclose(fp);
   init_function();

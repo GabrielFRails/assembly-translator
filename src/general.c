@@ -33,41 +33,23 @@ void allocate_pile(int * size_pile, int * param_types, int * param_addrs){
    int aux;
 
    for(int i=0; i<3; i++){
-      if(param_types[i] == 1){
-         total_size += 4;
-         switch(i){
-            case 0:
-               fprintf(fp, "\t# %%edi -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;
-            case 1:
-               fprintf(fp, "\t# %%esi -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;
-            case 2:
-               fprintf(fp, "\t# %%edx -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;   
-         }
+      if (total_size % 8 ==0) total_size += 8;
+      else total_size += 12;
+      switch(i){
+         case 0:
+            fprintf(fp, "\t# %%rdi -> %d(%%rbp)\n", -total_size);
+            param_addrs[i] = -total_size;
+            break;
+         case 1:
+            fprintf(fp, "\t# %%rsi -> %d(%%rbp)\n", -total_size);
+            param_addrs[i] = -total_size;
+            break;
+         case 2:
+            fprintf(fp, "\t# %%rdx -> %d(%%rbp)\n", -total_size);
+            param_addrs[i] = -total_size;
+            break;   
       }
-      else if (param_types[i] == 2){
-         if (total_size % 8 ==0) total_size += 8;
-         else total_size += 12;
-         switch(i){
-            case 0:
-               fprintf(fp, "\t# %%rdi -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;
-            case 1:
-               fprintf(fp, "\t# %%rsi -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;
-            case 2:
-               fprintf(fp, "\t# %%rdx -> %d(%%rbp)\n", -total_size);
-               param_addrs[i] = -total_size;
-               break;   
-         }
-      }
+      
    }
 
    if(total_size % 16 != 0){
