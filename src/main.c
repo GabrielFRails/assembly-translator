@@ -66,7 +66,7 @@ int main()
       if (strncmp(line, "end", 3) == 0)
       {
          if ((strncmp(line, "endif", 5) != 0)) {
-            process_function_end(line);
+            process_function_end();
             continue;
          }
       }
@@ -85,7 +85,7 @@ int main()
       //verifica se linha começa com 'if'
       if (strncmp(line, "if", 2) == 0) 
       {
-         process_if(line);
+         process_if(line, vl_addrs);
          continue;
       }
       //verifica se a linha começa com endif
