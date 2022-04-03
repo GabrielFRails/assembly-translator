@@ -273,18 +273,22 @@ f6:
 	# vi1 -> -4(%rbp)
 	# vi2 -> -8(%rbp)
 	# %rdi -> -16(%rbp)
-	subq $16, %rsp
+	# %rsi -> -24(%rbp)
+	subq $32, %rsp
 
 	# salvando parametros
-	movl %edi, -16(%rbp)
+	movq %rdi, -16(%rbp)
+	movq %rsi, -24(%rbp)
 
-	# vi2 = call f2 vi1
-	movl -4(%rbp), %edi
+	# vi2 = call f2 pi2
+	movq -24(%rbp), %rax
+	movl %eax, %edi
 	call f2
 	movl %eax -8(%rbp)
 
 	# recuperando parametros
 	movq -16(%rbp), %rdi
+	movq -24(%rbp), %rsi
 
 	# return vi1
 	movl -4(%rbp), %eax

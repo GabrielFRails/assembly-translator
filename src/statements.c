@@ -197,16 +197,13 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
     for(int i = 0; paramTypes[i]; i++){
         switch(i){
             case 0:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%edi, %d(%%rbp)\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %%rdi, %d(%%rbp)\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %%rdi, %d(%%rbp)\n", addrsParams[i]);
                 break;
             case 1:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%esi, %d(%%rbp)\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %%rsi, %d(%%rbp)\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %%rsi, %d(%%rbp)\n", addrsParams[i]);
                 break;
             case 2:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovl %%edx, %d(%%rbp)\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %%rdx, %d(%%rbp)\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %%rdx, %d(%%rbp)\n", addrsParams[i]);
         }
     }
 
@@ -231,9 +228,11 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'i':
                         if (indexParam1 == 2) 
                         {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%edi\n", addrsParams[1]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[1]);
+                            fprintf(fp, "\tmovl %%eax, %%edi\n");
                         } else if (indexParam1 == 3) {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%edi\n", addrsParams[2]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[2]);
+                            fprintf(fp, "\tmovl %%eax, %%edi\n");
                         }
                         break;
                     case 'a':
@@ -269,9 +268,11 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'i':
                         if (indexParam2 == 1) 
                         {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%esi\n", addrsParams[0]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[0]);
+                            fprintf(fp, "\tmovl %%eax, %%esi\n");
                         } else if (indexParam2 == 3) {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%esi\n", addrsParams[2]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[2]);
+                            fprintf(fp, "\tmovl %%eax, %%esi\n");
                         }
                         break;
                     case 'a':
@@ -308,9 +309,11 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
                     case 'i':
                         if (indexParam3 == 1) 
                         {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%edx\n", addrsParams[0]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[0]);
+                            fprintf(fp, "\tmovl %%eax, %%edx\n");
                         } else if (indexParam3 == 2) {
-                            fprintf(fp, "\tmovl %d(%%rbp), %%edx\n", addrsParams[1]);
+                            fprintf(fp, "\tmovq %d(%%rbp), %%rax\n", addrsParams[1]);
+                            fprintf(fp, "\tmovl %%eax, %%edx\n");
                         }
                         break;
                     case 'a':
@@ -338,16 +341,13 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
     for(int i = 0; paramTypes[i]; i++){
         switch(i){
             case 0:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %d(%%rbp), %%rdi\n", addrsParams[i]);
                 break;
             case 1:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %d(%%rbp), %%rsi\n", addrsParams[i]);
                 break;
             case 2:
-                if(paramTypes[i] == 1) fprintf(fp, "\tmovq %d(%%rbp), %%rdx\n", addrsParams[i]);
-                else fprintf(fp, "\tmovq %d(%%rbp), %%rdx\n", addrsParams[i]);
+                fprintf(fp, "\tmovq %d(%%rbp), %%rdx\n", addrsParams[i]);
         }
     }
 
