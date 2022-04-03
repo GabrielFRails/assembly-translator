@@ -334,7 +334,7 @@ void process_attr_with_function_call(char line[256], int * addrsParams, int * ad
 
     fprintf(fp, "\tcall f%d\n", functionIndex);
     // movendo o resultado da função para o destino especificado
-    fprintf(fp, "\tmovl %%eax %d(%%rbp)\n", addrVars[destIndex-1]);
+    fprintf(fp, "\tmovl %%eax, %d(%%rbp)\n", addrVars[destIndex-1]);
 
     if(paramTypes[0]) fprintf(fp, "\n\t# recuperando parametros\n");
     
